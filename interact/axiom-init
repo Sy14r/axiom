@@ -99,7 +99,7 @@ done
 
 
 if [[ "$quiet" != "true" ]]; then
-	"$NOTIFY_CMD" "Axiom Info" "Initializing '$name'..."
+	"$NOTIFY_CMD" "Axiom Info" "Initializing '$name'..." 2>/dev/null
 	echo -e "${BWhite}Initializing '$name'"
 fi
 image_name="axiom-$region"
@@ -158,7 +158,7 @@ fi
 
 echo "{\"instance\":\"$name\"}" | jq >$AXIOM_PATH/profile.json
 
-"$NOTIFY_CMD" "Axiom Info" "$name successfully initialized at $ip!"
+"$NOTIFY_CMD" "Axiom Info" "$name successfully initialized at $ip!" 2>/dev/null
 echo -e "${BWhite}Initialized instance '${BGreen}$name${Color_Off}${BWhite}' at '${BGreen}$ip${BWhite}'!"
 
 if [ "$quiet" != "true" ]; then

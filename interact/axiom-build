@@ -11,12 +11,12 @@ then
     echo -e "${BGreen}Your build completed successfully!${Color_Off}"
     echo -e "${Green}To initialize an instance, run axiom-init${Color_Off}"
 	  "$AXIOM_PATH"/interact/axiom-prune
-    "$NOTIFY_CMD" "Axiom Info" "Build completed successfully!"
+    "$NOTIFY_CMD" "Axiom Info" "Build completed successfully!" 2>/dev/null
 else
     echo -e "${BRed}Your build failed :( Please take a look at the errors!${Color_Off}"
     echo -e "${Blue}Builds may fail every now and then, there are some known bugs in Ubuntu Server that cause this."
 	  echo -e "Im sorry, but it just fails sometimes, just sit back and relax and we'll try again until  it works ;)${Color_Off}"
-    "$NOTIFY_CMD" "Axiom Info" "Build failed :("
+    "$NOTIFY_CMD" "Axiom Info" "Build failed :(" 2>/dev/null
     "$AXIOM_PATH"/interact/axiom-build
 fi
 
