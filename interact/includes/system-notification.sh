@@ -6,7 +6,7 @@ BASEOS="$(uname)"
 # method issuing notifications for at least most ubuntu like systems
 # expects a title as first and a notification as second argument
 function notify {
-  notify-send "$1" "$2"
+  notify-send "$1" "$2" 2>/dev/null
 }
 
 # method issuing notifications in place of notify-send on OSX
