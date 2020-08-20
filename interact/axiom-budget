@@ -79,7 +79,11 @@ echo -e "${Green}Would you like to proceed? [ENTER] ${Color_Off}"
 
 if [ "$prompt" == "true" ]
 then
-    read
+    read confirm
+    if [ "$confirm" == "n" ] || [ "$confirm" == "N" ]
+    then
+        exit
+    fi
 fi
 
 total_spend_per_instance=$(bc <<< "scale=2; $multi_instance_spend * $hours")
@@ -88,7 +92,7 @@ expiry=$(bc <<< "scale=2; $hours * 60")
 expiry=$(bc <<< "scale=2; $expiry - 8")
 
 
-for i in $(seq -f "%02g" 1 $amount)
+for i in $(seq 1 $amount | awk '{printf "%02g\n", $0}')
 do
    name="$gen_name$i"
    echo -e "${BWhite}Initializing $name for $hours hours... This instance will cost exactly \$$total_spend_per_instance"
