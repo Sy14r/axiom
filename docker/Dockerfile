@@ -12,6 +12,7 @@ RUN apk update && apk upgrade && \
         git \
         jq \
         openssh \
+        openvpn \
         perl \
         rsync \
         tar \
