@@ -1,0 +1,85 @@
+#!/bin/bash
+
+AXIOM_PATH="$HOME/.axiom"
+source "/root/vars.sh"
+
+echo -e "${Blue}Hello! Welcome to Axiom configuration :)"
+echo -e "To begin, I will ask you a few questions"
+echo -e "Press enter to continue${Color_Off}"
+read
+
+if [ ! -d $AXIOM_PATH/.git ]; then
+	git clone https://github.com/pry0cc/axiom $AXIOM_PATH/axiom
+	mv $AXIOM_PATH/axiom/* $AXIOM_PATH 2>/dev/null
+	mv $AXIOM_PATH/axiom/.* $AXIOM_PATH 2>/dev/null
+	rm -rf $AXIOM_PATH/axiom 2>/dev/null
+else
+	cd $AXIOM_PATH && git pull
+fi
+
+echo -e "${BBlue}What is your DigitalOcean API key? ${Color_Off}"
+echo -e -n "${Blue}Key >> ${Color_Off}"
+read do_key
+echo -e "${Blue}Setting up doctl!...${Color_Off}"
+doctl auth init -t $do_key
+#echo "What would you like to pick for region? nyc3, sfo2 <-- this one is best"
+region="sfo2"
+#echo -n "Region >> "
+#read region
+#echo "What domain do you use?"
+#echo -n "Domain >> "
+#read domain
+domain=""
+#echo "What is your Hunter key? (optional)"
+#echo -n "Key >> "
+hunter_key=""
+size="s-1vcpu-1gb"
+
+if [ -f ~/.ssh/id_rsa.pub ] || [ -f ~/.ssh/id_ed25519.pub ]; then
+	echo -e "${Blue}Detected SSH public key, would you like me to install this for your axiom setup? y/n ${Color_Off}"
+	read ans
+	if [ $ans == "y" ]; then
+		if [ -f ~/.ssh/id_rsa.pub ]; then
+			cat ~/.ssh/id_rsa.pub >$AXIOM_PATH/configs/authorized_keys
+		elif [ -f ~/.ssh/id_ed25519.pub ]; then
+			cat ~/.ssh/id_ed25519.pub >$AXIOM_PATH/configs/authorized_keys
+		fi
+	fi
+else
+	echo -e "${Blue}No SSH public key detected, would you like to generate a fresh pair? y/n ${Color_Off}"
+	read ans
+	if [ $ans == "y" ]; then
+		ssh-keygen
+		cat ~/.ssh/id_rsa.pub >$AXIOM_PATH/configs/authorized_keys
+	fi
+fi
+
+if [ "$SHELL" == "/usr/local/bin/zsh" ] || [ "$SHELL" == "/usr/bin/zsh" ]; then
+	echo -e "${Green}You're running ZSH! Installing Axiom to \$PATH...${Color_Off}"
+	echo "export PATH=\"\$PATH:\$HOME/.axiom/interact\"" >>~/.zshrc
+	echo "source $HOME/.axiom/functions/autocomplete.zsh" >>~/.zshrc
+	echo "compdef _axiom-ssh axiom-rm" >>~/.zshrc
+	echo "compdef _axiom-ssh axiom-ssh" >>~/.zshrc
+	echo "compdef _axiom-ssh axiom-select" >>~/.zshrc
+	echo "compdef _axiom-ssh axiom-backup" >>~/.zshrc
+	echo "compdef _axiom-ssh axiom-vpn" >>~/.zshrc
+	echo "compdef _axiom-restore axiom-restore" >>~/.zshrc
+	echo "compdef _axiom-deploy axiom-deploy" >>~/.zshrc
+
+elif [ "$SHELL" == "/bin/bash" ]; then
+	echo -e "${Green}You're running Bash! Installing Axiom to \$PATH...${Color_Off}"
+	echo "export PATH=\"\$PATH:\$HOME/.axiom/interact\"" >>~/.bashrc
+else
+	echo -e "${Red}I don't have a predefined setup for your shell!"
+	echo "Please add $AXIOM_PATH/interact to your \$PATH! ${Color_Off}"
+	echo "(export PATH=\"\$PATH:$HOME/.axiom/interact\")"
+fi
+
+export PATH="$PATH:$HOME/.axiom/interact"
+
+echo "{\"do_key\":\"$do_key\", \"region\":\"$region\", \"domain\":\"$domain\", \"default_size\":\"$size\", \"hunter_key\":\"$hunter_key\"}" | jq >$AXIOM_PATH/axiom.json
+
+echo -e "${BWhite}Beginning first packer build...${Color_Off}"
+cd $AXIOM_PATH/
+packer build -var-file $AXIOM_PATH/axiom.json $AXIOM_PATH/packer.json
+cd
