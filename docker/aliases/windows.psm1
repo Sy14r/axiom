@@ -1,11 +1,23 @@
 # Appears functional 
 function Invoke-AxiomBackup {
+    foreach($arg in $args){
+        if($arg -eq "*"){
+            $args[$count] = "\*"
+        }
+        $count += 1
+    }
     docker run -it --rm -v $HOME/.axiom:/root/.axiom -v $HOME/.axiom/.ssh:/root/.ssh -v $HOME/.axiom/.config:/root/.config sy14r/axiom /root/.axiom/interact/axiom-backup $args
 }
 Set-Alias axiom-backup Invoke-AxiomBackup
 
 # Appears functional
 function Invoke-AxiomBoxes {
+    foreach($arg in $args){
+        if($arg -eq "*"){
+            $args[$count] = "\*"
+        }
+        $count += 1
+    }
     docker run -it --rm -v $HOME/.axiom:/root/.axiom -v $HOME/.axiom/.ssh:/root/.ssh -v $HOME/.axiom/.config:/root/.config sy14r/axiom /root/.axiom/interact/axiom-boxes $args
 }
 Set-Alias axiom-boxes Invoke-AxiomBoxes
@@ -27,30 +39,143 @@ function Invoke-AxiomConfigure {
     New-Item -ItemType Directory -Path $HOME/.axiom -ErrorAction SilentlyContinue 1>$null
     New-Item -ItemType Directory -Path $HOME/.axiom/.ssh -ErrorAction SilentlyContinue 1>$null
     New-Item -ItemType Directory -Path $HOME/.axiom/.config -ErrorAction SilentlyContinue 1>$null
-    docker run -it --rm -v $HOME/.axiom:/root/.axiom -v $HOME/.axiom/.ssh:/root/.ssh -v $HOME/.axiom/.config:/root/.config sy14r/axiom /root/axiom-configure-docker
+    docker run -it --rm -v $HOME/.axiom:/root/.axiom -v $HOME/.axiom/.ssh:/root/.ssh -v $HOME/.axiom/.config:/root/.config sy14r/axiom /root/axiom-configure
 }
 Set-Alias axiom-configure Invoke-AxiomConfigure
 
 # Appears functional
 function Invoke-AxiomConnect {
+    foreach($arg in $args){
+        if($arg -eq "*"){
+            $args[$count] = "\*"
+        }
+        $count += 1
+    }
     docker run -it --rm -v $HOME/.axiom:/root/.axiom -v $HOME/.axiom/.ssh:/root/.ssh -v $HOME/.axiom/.config:/root/.config sy14r/axiom /root/.axiom/interact/axiom-connect $args
 }
 Set-Alias axiom-connect Invoke-AxiomConnect
 
 # Appears functional
 function Invoke-AxiomDeploy {
+    foreach($arg in $args){
+        if($arg -eq "*"){
+            $args[$count] = "\*"
+        }
+        $count += 1
+    }
     docker run -it --rm -v $HOME/.axiom:/root/.axiom -v $HOME/.axiom/.ssh:/root/.ssh -v $HOME/.axiom/.config:/root/.config sy14r/axiom /root/.axiom/interact/axiom-deploy $args
 }
 Set-Alias axiom-deploy Invoke-AxiomDeploy
 
 # Appears functional
 function Invoke-AxiomDNS {
+    foreach($arg in $args){
+        if($arg -eq "*"){
+            $args[$count] = "\*"
+        }
+        $count += 1
+    }
     docker run -it --rm -v $HOME/.axiom:/root/.axiom -v $HOME/.axiom/.ssh:/root/.ssh -v $HOME/.axiom/.config:/root/.config sy14r/axiom /root/.axiom/interact/axiom-dns $args
 }
 Set-Alias axiom-dns Invoke-AxiomDNS
-# HERENOW
+
+# Appears functional
+function Invoke-AxiomDocker {
+    Write-Host "Support for remote docker host via axiom is not supported in Windows"
+}
+Set-Alias axiom-docker Invoke-AxiomDocker
+
+# Appears functional
+function Invoke-AxiomExec {
+    $count = 0
+    foreach($arg in $args){
+        if($arg -eq "*"){
+            $args[$count] = "\*"
+        }
+        $count += 1
+    }
+    docker run -it --rm -v $HOME/.axiom:/root/.axiom -v $HOME/.axiom/.ssh:/root/.ssh -v $HOME/.axiom/.config:/root/.config sy14r/axiom /root/.axiom/interact/axiom-exec $args
+}
+Set-Alias axiom-exec Invoke-AxiomExec
+
+# Appears functional
+function Invoke-AxiomExecB {
+    $count = 0
+    foreach($arg in $args){
+        if($arg -eq "*"){
+            $args[$count] = "\*"
+        }
+        $count += 1
+    }
+    docker run -it --rm -v $HOME/.axiom:/root/.axiom -v $HOME/.axiom/.ssh:/root/.ssh -v $HOME/.axiom/.config:/root/.config sy14r/axiom /root/.axiom/interact/axiom-execb $args
+}
+Set-Alias axiom-execb Invoke-AxiomExecB
+
+# Appears functional
+function Invoke-AxiomFleet {
+    $count = 0
+    foreach($arg in $args){
+        if($arg -eq "*"){
+            $args[$count] = "\*"
+        }
+        $count += 1
+    }
+    docker run -it --rm -v $HOME/.axiom:/root/.axiom -v $HOME/.axiom/.ssh:/root/.ssh -v $HOME/.axiom/.config:/root/.config sy14r/axiom /root/.axiom/interact/axiom-fleet $args
+}
+Set-Alias axiom-fleet Invoke-AxiomFleet
+
+# Appears functional
+function Invoke-AxiomInit {
+    docker run -it --rm -v $HOME/.axiom:/root/.axiom -v $HOME/.axiom/.ssh:/root/.ssh -v $HOME/.axiom/.config:/root/.config sy14r/axiom /root/.axiom/interact/axiom-init $args
+}
+Set-Alias axiom-init Invoke-AxiomInit
+
+# Appears functional
+function Invoke-AxiomLs {
+    docker run -it --rm -v $HOME/.axiom:/root/.axiom -v $HOME/.axiom/.ssh:/root/.ssh -v $HOME/.axiom/.config:/root/.config sy14r/axiom /root/.axiom/interact/axiom-ls $args
+}
+Set-Alias axiom-ls Invoke-AxiomLs
+
+# Appears functional
+function Invoke-AxiomProxy {
+    Write-Host "Support for proxy via axiom is not supported in Windows"
+}
+Set-Alias axiom-docker Invoke-AxiomProxy
+
 
 # Need to check
+function Invoke-AxiomPrune {
+    $count = 0
+    foreach($arg in $args){
+        if($arg -eq "*"){
+            $args[$count] = "\*"
+        }
+        $count += 1
+    }
+    docker run -it --rm -v $HOME/.axiom:/root/.axiom -v $HOME/.axiom/.ssh:/root/.ssh -v $HOME/.axiom/.config:/root/.config sy14r/axiom /root/.axiom/interact/axiom-prune $args
+}
+Set-Alias axiom-prune Invoke-AxiomPrune
+
+# Appears functional
+function Invoke-AxiomRegion {
+    docker run -it --rm -v $HOME/.axiom:/root/.axiom -v $HOME/.axiom/.ssh:/root/.ssh -v $HOME/.axiom/.config:/root/.config sy14r/axiom /root/.axiom/interact/axiom-region $args
+}
+Set-Alias axiom-region Invoke-AxiomRegion
+
+# Appears to work
+function Invoke-AxiomRestore {
+    $count = 0
+    foreach($arg in $args){
+        if($arg -eq "*"){
+            $args[$count] = "\*"
+        }
+        $count += 1
+    }
+    docker run -it --rm -v $HOME/.axiom:/root/.axiom -v $HOME/.axiom/.ssh:/root/.ssh -v $HOME/.axiom/.config:/root/.config sy14r/axiom /root/.axiom/interact/axiom-restore $args
+}
+Set-Alias axiom-restore Invoke-AxiomRestore
+
+# Appears to work
 function Invoke-AxiomRm {
     $count = 0
     foreach($arg in $args){
@@ -63,7 +188,71 @@ function Invoke-AxiomRm {
 }
 Set-Alias axiom-rm Invoke-AxiomRm
 
-# Good
+# Appears to work
+function Invoke-AxiomScan {
+    $count = 0
+    $targFile = ""
+    foreach($arg in $args){
+        if($arg.startswith('-iL=')){
+            $targFile = ($arg -split '=')[1]
+            $targContent = Get-Content $targFile 
+            $targContent | Out-File -Encoding ascii $targFile
+        }
+        if($arg -eq "*"){
+            $args[$count] = "\*"
+        }
+        $count += 1
+    }
+    docker create --name axiom-scan -it --rm -v $HOME/.axiom:/root/.axiom -v $HOME/.axiom/.ssh:/root/.ssh -v $HOME/.axiom/.config:/root/.config sy14r/axiom /root/.axiom/interact/axiom-scan $args
+    docker cp $targFile axiom-scan:/$targFile
+    docker start -i -a axiom-scan 
+}
+Set-Alias axiom-scan Invoke-AxiomScan
+
+# Works but will need to have documentation on the quirks around using -u= for specifiying file upload
+function Invoke-AxiomSCP {
+    $count = 0
+    $targFile = ""
+    foreach($arg in $args){
+        if($arg.startswith('-u=')){
+            $targFile = ($arg -split '=')[1]
+            $targContent = Get-Content $targFile 
+            $targContent | Out-File -Encoding ascii $targFile
+            $args[$count] = $targFile
+        }
+        if($arg -eq "*"){
+            $args[$count] = "\*"
+        }
+        $count += 1
+    }
+    docker create --name axiom-scp -it --rm -v $HOME/.axiom:/root/.axiom -v $HOME/.axiom/.ssh:/root/.ssh -v $HOME/.axiom/.config:/root/.config sy14r/axiom /root/.axiom/interact/axiom-scp $args
+    if($targFile.ToString().Length -gt 0){
+        docker cp $targFile axiom-scp:/$targFile
+    }
+    docker start -i -a axiom-scp 
+
+}
+Set-Alias axiom-scp Invoke-AxiomSCP
+
+# Appears functional
+function Invoke-AxiomSelect {
+    docker run -it --rm -v $HOME/.axiom:/root/.axiom -v $HOME/.axiom/.ssh:/root/.ssh -v $HOME/.axiom/.config:/root/.config sy14r/axiom /root/.axiom/interact/axiom-select $args
+}
+Set-Alias axiom-select Invoke-AxiomSelect
+
+# Appears functional
+function Invoke-AxiomSSH {
+    docker run -it --rm -v $HOME/.axiom:/root/.axiom -v $HOME/.axiom/.ssh:/root/.ssh -v $HOME/.axiom/.config:/root/.config sy14r/axiom /root/.axiom/interact/axiom-ssh $args
+}
+Set-Alias axiom-ssh Invoke-AxiomSSH
+
+# Appears functional
+function Invoke-AxiomUpdate {
+    docker run -it --rm -v $HOME/.axiom:/root/.axiom -v $HOME/.axiom/.ssh:/root/.ssh -v $HOME/.axiom/.config:/root/.config sy14r/axiom /root/.axiom/interact/axiom-update $args
+}
+Set-Alias axiom-update Invoke-AxiomUpdate
+
+# Appears functional
 function Invoke-AxiomVPN {
     $prof = (Get-Content $HOME/.axiom/axiom.json | ConvertFrom-Json)
     if(!$prof.openvpn_path){
@@ -85,28 +274,29 @@ function Invoke-AxiomVPN {
 }
 Set-Alias axiom-vpn Invoke-AxiomVPN
 
-
 # Appears functional
-function Invoke-AxiomInit {
-    docker run -it --rm -v $HOME/.axiom:/root/.axiom -v $HOME/.axiom/.ssh:/root/.ssh -v $HOME/.axiom/.config:/root/.config sy14r/axiom /root/.axiom/interact/axiom-init $args
+function Invoke-AxiomWait {
+    $count = 0
+    foreach($arg in $args){
+        if($arg -eq "*"){
+            $args[$count] = "\*"
+        }
+        $count += 1
+    }
+    docker run -it --rm -v $HOME/.axiom:/root/.axiom -v $HOME/.axiom/.ssh:/root/.ssh -v $HOME/.axiom/.config:/root/.config sy14r/axiom /root/.axiom/interact/axiom-wait $args
 }
-Set-Alias axiom-init Invoke-AxiomInit
+Set-Alias axiom-wait Invoke-AxiomWait
 
 
-# Appears functional
-function Invoke-AxiomLs {
-    docker run -it --rm -v $HOME/.axiom:/root/.axiom -v $HOME/.axiom/.ssh:/root/.ssh -v $HOME/.axiom/.config:/root/.config sy14r/axiom /root/.axiom/interact/axiom-ls $args
-}
-Set-Alias axiom-ls Invoke-AxiomLs
 
-# Appears functional
-function Invoke-AxiomUpdate {
-    docker run -it --rm -v $HOME/.axiom:/root/.axiom -v $HOME/.axiom/.ssh:/root/.ssh -v $HOME/.axiom/.config:/root/.config sy14r/axiom /root/.axiom/interact/axiom-update $args
-}
-Set-Alias axiom-update Invoke-AxiomUpdate
 
-# Appears functional
-function Invoke-AxiomSelect {
-    docker run -it --rm -v $HOME/.axiom:/root/.axiom -v $HOME/.axiom/.ssh:/root/.ssh -v $HOME/.axiom/.config:/root/.config sy14r/axiom /root/.axiom/interact/axiom-select $args
-}
-Set-Alias axiom-select Invoke-AxiomSelect
+
+
+
+
+
+
+
+
+
+

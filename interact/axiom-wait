@@ -18,12 +18,12 @@ command="$1"
 exit=1
 while [[ "$exit" -gt 0 ]]
 do 
-	exit=$(axiom-exec "ps cax | pgrep "$command" | wc -l | awk '{ print \$1 }'" "$instance" -q)
+	exit=$($AXIOM_PATH/interact/axiom-exec "ps cax | pgrep "$command" | wc -l | awk '{ print \$1 }'" "$instance" -q)
 
 	sleep $(expr $RANDOM % 20)
 done
 
 echo -e "${BGreen}'$command' has completed! Backing up and deleting '$instance'..."
 sleep 5
-axiom-backup "$instance"
-axiom-rm "$instance" -f
+$AXIOM_PATH/interact/axiom-backup "$instance"
+$AXIOM_PATH/interact/axiom-rm "$instance" -f

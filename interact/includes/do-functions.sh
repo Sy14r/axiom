@@ -105,14 +105,14 @@ lsplit() {
 
 	for f in $(ls | grep x)
 	do
-		mv $f $a.txt
+		mv $f $a.txt 2>/dev/null
 		a=$((a+1))
 	done
 
 	i=1
 	for instance in $(echo $instances | tr ' ' '\n')
 	do
-		mv $i.txt $instance.txt
+		mv $i.txt $instance.txt 2>/dev/null
 		i=$((i+1))
 	done
 	

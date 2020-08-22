@@ -85,7 +85,7 @@ then
 	then
 		echo -e "${Blue}Splitting file $targets_infile across all instances...${Color_Off}"
 		src_prefix=$(lsplit $targets_infile "$instances")
-		axiom-scp "$src_prefix/\$name.txt" "$query:$box_infile"
+		$AXIOM_PATH/interact/axiom-scp "$src_prefix/\$name.txt" "$query:$box_infile"
 	else
 		mkdir -p $src_prefix
 	fi
@@ -101,7 +101,7 @@ then
 	then
 		ssh_args="-t"
 	fi
-	interlace -tL $src_prefix/hosts.txt -threads $total -c "axiom-exec '$cmd_rendered' '_target_' -q $ssh_args" 
+	interlace -tL $src_prefix/hosts.txt -threads $total -c "$AXIOM_PATH/interact/axiom-exec '$cmd_rendered' '_target_' -q $ssh_args" 
 	echo -e "${Blue}Downloading output from fleet '$query'...${Color_Off}"
 
 	rm -rf "$src_prefix"
@@ -110,17 +110,23 @@ then
 	if [ "$outdir" == "true" ]
 	then
 		# Recursive Directory Download
-		axiom-scp "$query:$box_outfile/*" "$src_prefix"
+		$AXIOM_PATH/interact/axiom-scp "$query:$box_outfile/*" "$src_prefix"
 		sleep 1
 		mv $src_prefix/output $outfile
 		echo -e "${Green}Output saved to $outfile/${Color_Off}"
 	else
-		axiom-scp "$query:$box_outfile" "$src_prefix/\$name-out.$ext"
+		$AXIOM_PATH/interact/axiom-scp "$query:$box_outfile" "$src_prefix/\$name-out.$ext"
 		if [[ "$outformat" == "txt" ]] || [[ "$outformat" == "greppable" ]]
 		then
 			echo -e "${Green}Merging and sorting output...${Color_Off}"
 			cat $src_prefix/$query-out.$ext | sort -u > $outfile
-			echo -e "${BGreen}File saved to $outfile${Color_Off}"
+			if [[ -f /.axiom-docker ]]
+			then
+				mv $outfile $AXIOM_PATH/
+				echo -e "${BGreen}File saved to .axiom/$outfile${Color_Off}"
+			else
+				echo -e "${BGreen}File saved to $outfile${Color_Off}"
+			fi
 		elif [[ "$outformat" == "xml" ]];
 		then
 			"$AXIOM_PATH/interact/merge-xml.py" -d "$src_prefix" -o "$(PWD)/$outfile"

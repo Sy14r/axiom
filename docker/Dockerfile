@@ -1,21 +1,28 @@
-FROM alpine
+FROM ubuntu
 LABEL maintainer="sy14r"
 
-COPY ./axiom-configure-docker /root/
-COPY ./vars.sh /root/
+# bootstrapped startup files
+COPY ./axiom-configure-docker /
+COPY ./vars.sh /
 # packages needed - gpg
-RUN apk update && apk upgrade && \
-    apk add \
+RUN apt update && apt upgrade -y && \
+    DEBIAN_FRONTEND=noninteractive \
+    TZ=America/Denver apt install -y \
         bash \
+        bc \
+        bsdmainutils \
         curl \
         fzf \
         git \
         jq \
-        openssh \
         openvpn \
         perl \
+        python3 \
+        python3-setuptools \
         rsync \
+        ssh \
         tar \
+        unzip \
         util-linux \
         && \
     curl -sL https://github.com/digitalocean/doctl/releases/download/v1.46.0/doctl-1.46.0-linux-amd64.tar.gz | tar -xzv && \
@@ -33,10 +40,9 @@ RUN apk update && apk upgrade && \
         echo "export GOROOT=/usr/local/go" >>/root/.bash_profile && \
         echo "export GOPATH=\$HOME/go" >>/root/.bash_profile && \
         echo "export PATH=\$GOPATH/bin:\$GOROOT/bin:\$PATH" >>/root/.bash_profile && \
+    git clone https://github.com/codingo/Interlace.git && cd Interlace && python3 setup.py install && \
     sed -i /etc/passwd -e 's#/bin/ash#/bin/bash#' && \
-    cd /root && chmod +x axiom-configure-docker
-
+    cd /root && chmod +x axiom-configure && \
+    touch /.axiom-docker
 
 ENTRYPOINT ["/bin/bash"]
-
-
