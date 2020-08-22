@@ -103,9 +103,11 @@ if [ $BASEOS == "Mac" ]; then
 fi
 
 if [ ! -d $AXIOM_PATH ]; then
-	git clone https://github.com/pry0cc/axiom $AXIOM_PATH
+	# will update if processes merged into main project
+	git clone https://github.com/sy14r/axiom $AXIOM_PATH
+	git checkout docker
 else
-	cd $AXIOM_PATH && git pull
+	cd $AXIOM_PATH && git checkout docker && git pull
 fi
 
 echo -e "${BBlue}What is your DigitalOcean API key? ${Color_Off}"
