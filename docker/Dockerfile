@@ -42,7 +42,7 @@ RUN apt update && apt upgrade -y && \
         echo "export PATH=\$GOPATH/bin:\$GOROOT/bin:\$PATH" >>/root/.bash_profile && \
     git clone https://github.com/codingo/Interlace.git && cd Interlace && python3 setup.py install && \
     sed -i /etc/passwd -e 's#/bin/ash#/bin/bash#' && \
-    cd /root && chmod +x axiom-configure && \
+    chmod +x /axiom-configure && \
     touch /.axiom-docker
 
 ENTRYPOINT ["/bin/bash"]
