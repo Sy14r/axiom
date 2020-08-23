@@ -2,7 +2,7 @@ FROM ubuntu
 LABEL maintainer="sy14r"
 
 # bootstrapped startup files
-COPY ./axiom-configure-docker /
+COPY ./axiom-configure-docker /axiom-configure
 COPY ./vars.sh /
 # packages needed - gpg
 RUN apt update && apt upgrade -y && \
