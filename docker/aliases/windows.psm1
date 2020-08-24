@@ -291,7 +291,11 @@ function Invoke-AxiomWait {
 }
 Set-Alias axiom-wait Invoke-AxiomWait
 
-
+# Appears functional
+function Invoke-AxiomCLI {
+    docker run -it --rm -v $HOME/.axiom-root:/root sy14r/axiom
+}
+Set-Alias axiom-cli Invoke-AxiomCLI
 
 
 
