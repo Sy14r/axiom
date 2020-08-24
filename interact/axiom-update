@@ -4,5 +4,6 @@ cd ~/.axiom/
 if [[ -f "/.axiom-docker" ]]
 then
     git checkout docker
+    git stash
 fi
 git pull
