@@ -105,10 +105,13 @@ fi
 if [ ! -d $AXIOM_PATH ]; then
 	# will update if processes merged into main project
 	git clone https://github.com/sy14r/axiom $AXIOM_PATH
+	cd $AXIOM_PATH
 	git checkout docker
 	git pull
 else
-	cd $AXIOM_PATH && git checkout docker && git pull
+	cd $AXIOM_PATH 
+	git checkout docker 
+	git pull
 fi
 
 echo -e "${BBlue}What is your DigitalOcean API key? ${Color_Off}"
