@@ -221,7 +221,8 @@ function Invoke-AxiomSCP {
             $targFile = ($arg -split '=')[1]
             $targContent = Get-Content $targFile 
             $targContent | Out-File -Encoding ascii $targFile
-            $args[$count] = $targFile
+            $justFileName = (Get-ChildItem $targFile).Name
+            $args[$count] = $justFileName
         }
         if($arg -eq "*"){
             $args[$count] = "\*"
@@ -230,7 +231,7 @@ function Invoke-AxiomSCP {
     }
     docker create --name axiom-scp -it --rm -v $HOME/.axiom-root:/root sy14r/axiom /root/.axiom/interact/axiom-scp $args
     if($targFile.ToString().Length -gt 0){
-        docker cp $targFile axiom-scp:/$targFile
+        docker cp $targFile axiom-scp:/$justFileName
     }
     docker start -i -a axiom-scp 
 
@@ -258,7 +259,7 @@ Set-Alias axiom-update Invoke-AxiomUpdate
 
 # Appears functional
 function Invoke-AxiomVPN {
-    $prof = (Get-Content $HOME/.axiom/axiom.json | ConvertFrom-Json)
+    $prof = (Get-Content $HOME/.axiom-root/.axiom/axiom.json | ConvertFrom-Json)
     if(!$prof.openvpn_path){
         if(Test-Path -Path "C:\Program Files\OpenVPN\bin\openvpn.exe"){
             $exeLocation = "C:\Program Files\OpenVPN\bin\openvpn.exe"
@@ -274,7 +275,7 @@ function Invoke-AxiomVPN {
         $prof | ConvertTo-Json | Out-File -Encoding ascii -FilePath $HOME/.axiom/axiom.json    
     }
     docker run -it --rm -v $HOME/.axiom-root:/root sy14r/axiom /root/.axiom/interact/axiom-vpn --download $args
-    & $prof.openvpn_path $HOME\.axiom\current-config.ovpn    
+    & $prof.openvpn_path $HOME\.axiom-root\.axiom\current-config.ovpn    
 }
 Set-Alias axiom-vpn Invoke-AxiomVPN
 
