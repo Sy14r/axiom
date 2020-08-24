@@ -251,6 +251,7 @@ Set-Alias axiom-ssh Invoke-AxiomSSH
 
 # Appears functional
 function Invoke-AxiomUpdate {
+    docker pull sy14r/axiom
     docker run -it --rm -v $HOME/.axiom-root:/root sy14r/axiom /root/.axiom/interact/axiom-update $args
 }
 Set-Alias axiom-update Invoke-AxiomUpdate
