@@ -21,6 +21,7 @@ RUN apt update && apt upgrade -y && \
         python3-setuptools \
         rsync \
         ssh \
+        sudo \
         tar \
         unzip \
         util-linux \
