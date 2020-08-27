@@ -145,27 +145,21 @@ alias axiom-update="set -f; func-axiom-update"
 
 # TODO - axiom-vpn
 func-axiom-vpn () {
-    # $prof = (Get-Content $HOME/.axiom-root/.axiom/axiom.json | ConvertFrom-Json)
-    # if(!$prof.openvpn_path){
-    #     if(Test-Path -Path "C:\Program Files\OpenVPN\bin\openvpn.exe"){
-    #         $exeLocation = "C:\Program Files\OpenVPN\bin\openvpn.exe"
-    #     }
-    #     else {
-    #         Write-Host "In order to run axiom-vpn you must hav OpenVPN installed"
-    #         Write-Host "Please enter the full path to your OpenVPN Executable:"
-    #         Write-Host "IE: C:\Program Files\OpenVPN\bin\openvpn.exe"
-    #         $location = Read-Host -Prompt 'Location: '
-    #         $exeLocation = $location
-    #     }    
-    #     Add-Member -InputObject $prof -MemberType NoteProperty -Name openvpn_path -Value $exeLocation
-    #     $prof | ConvertTo-Json | Out-File -Encoding ascii -FilePath $HOME/.axiom/axiom.json    
-    # }
-    docker run -it --rm --network host -v $HOME/.axiom-root:/root sy14r/axiom /root/.axiom/interact/axiom-vpn --download "$@"
+    # OPENVPN_PATH=$(egrep "openvpn_path" $HOME/.axiom-root/.axiom/axiom.json  | cut -d ":" -f2 | tr -d '"')
+    OPENVPN_PATH=$(docker run -it --rm -v $HOME/.axiom-root:/root sy14r/axiom "cat /root/.axiom/axiom.json | jq  .openvpn_path 2>/dev/null ")
+    OPENVPN_PATH=$(echo $OPENVPN_PATH | cut -d '"' -f2)
+    if [ ! -x "$OPENVPN_PATH" ]
+    then
+        echo "Could not find saved openvpn path."
+        echo "Please enter the full path to where you have openvpn installed"
+        echo ""
+        read OPENVPN_PATH
+        docker run -it --rm -v $HOME/.axiom-root:/root sy14r/axiom "cat ~/.axiom/axiom.json | jq --arg key openvpn_path --arg val \"$OPENVPN_PATH\" '.[\$key] = \$val' > /tmp/axiom.json; mv /tmp/axiom.json ~/.axiom/axiom.json"
+    fi
+    docker run -it --rm -v $HOME/.axiom-root:/root sy14r/axiom "/root/.axiom/interact/axiom-vpn $@ --download"
     set +f;  
-    echo """
-    VPN profile downloaded to $HOME/.axiom-root/.axiom/current-config.ovpn
-    """
-    # & $prof.openvpn_path $HOME\.axiom-root\.axiom\current-config.ovpn  
+    sudo $OPENVPN_PATH $HOME/.axiom-root/.axiom/current-config.ovpn  
+    rm -f $HOME/.axiom-root/.axiom/current-config.ovpn
 }
 alias axiom-vpn='set -f; func-axiom-vpn'
 
@@ -176,7 +170,7 @@ func-axiom-wait () {
 alias axiom-wait="set -f; func-axiom-wait"
 
 func-axiom-cli () {
-    docker run -it --rm -v $HOME/.axiom-root:/root sy14r/axiom
+    docker run -it --rm -v $HOME/.axiom-root:/root sy14r/axiom bash
     set +f;
 }
 alias axiom-cli="set -f; func-axiom-cli"

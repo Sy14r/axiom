@@ -1,13 +1,15 @@
 #!/usr/bin/env bash
 AXIOM_PATH="$HOME/.axiom"
-
 download=false
+target=""
 
 for var in "$@"
 do
     if [ $var == "--download" ]
     then
         download=true
+    else
+        target=$var
     fi
 done
 
@@ -20,8 +22,13 @@ then
 else
     if [ $download ]
     then
-        ans="$(doctl compute droplet list | awk '{ print $2 }' | grep -v "Name" | fzf)"
-        ip="$(doctl compute droplet list | grep "$ans" | awk '{ print $3 }')"
+	if [ -z "$target" ]
+	then
+            ans="$(doctl compute droplet list | awk '{ print $2 }' | grep -v "Name" | fzf)"
+            ip="$(doctl compute droplet list | grep "$ans" | awk '{ print $3 }')"
+        else
+            ip="$(doctl compute droplet list | grep "$target" | awk '{ print $3 }')"
+        fi
         scp -P2266 op@"$ip":/home/op/vpn/client.ovpn /tmp/"$ans".ovpn
         cp /tmp/"$ans".ovpn $AXIOM_PATH/current-config.ovpn
     else

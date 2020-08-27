@@ -46,4 +46,4 @@ RUN apt update && apt upgrade -y && \
     chmod +x /axiom-configure && \
     touch /.axiom-docker
 
-ENTRYPOINT ["/bin/bash"]
+ENTRYPOINT ["/bin/bash", "-l", "-c"]
