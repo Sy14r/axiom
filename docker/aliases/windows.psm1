@@ -216,27 +216,7 @@ Set-Alias axiom-scan Invoke-AxiomScan
 # Works but will need to have documentation on the quirks around using -u= for specifiying file upload
 # For scp use files in current dir or below you and then mount $PWD
 function Invoke-AxiomSCP {
-    $count = 0
-    $targFile = ""
-    foreach($arg in $args){
-        if($arg.startswith('-u=')){
-            $targFile = ($arg -split '=')[1]
-            $targContent = Get-Content $targFile 
-            $targContent | Out-File -Encoding ascii $targFile
-            $justFileName = (Get-ChildItem $targFile).Name
-            $args[$count] = $justFileName
-        }
-        if($arg -eq "*"){
-            $args[$count] = "\*"
-        }
-        $count += 1
-    }
-    docker create --name axiom-scp -it --rm -v $HOME/.axiom-root:/root sy14r/axiom /root/.axiom/interact/axiom-scp $args
-    if($targFile.ToString().Length -gt 0){
-        docker cp $targFile axiom-scp:/$justFileName
-    }
-    docker start -i -a axiom-scp 
-
+    docker run --name axiom-scp -it --rm -v $PWD/:/tmp -v $HOME/.axiom-root:/root sy14r/axiom "cd /tmp; /root/.axiom/interact/axiom-scp $args"
 }
 Set-Alias axiom-scp Invoke-AxiomSCP
 
@@ -296,7 +276,7 @@ Set-Alias axiom-wait Invoke-AxiomWait
 
 # Appears functional
 function Invoke-AxiomCLI {
-    docker run -it --rm -v $PWD:/tmp -v $HOME/.axiom-root:/root sy14r/axiom "bash"
+    docker run -it --rm -v $PWD/:/tmp -v $HOME/.axiom-root:/root sy14r/axiom "bash"
 }
 Set-Alias axiom-cli Invoke-AxiomCLI
 
